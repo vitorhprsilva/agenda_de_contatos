@@ -1,43 +1,39 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar } from 'react-native';
+import { SafeAreaView, Image, FlatList, StyleSheet, Text, StatusBar } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import api from '../../untils/api';
 
-const DATA = [
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    title: 'First Item',
-  },
-  {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-    title: 'Second Item',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72',
-    title: 'Third Item',
-  },
-];
 
-const Item = ({ title }) => (
-  <View style={styles.item}>
-    <Text style={styles.title}>{title}</Text>
-  </View>
-);
+const HomeScreen = ({navigation}) => {
 
-const HomeScreen = () => {
-    const [selectedId, setSelectedId] = useState(null);
+    const [contacts, setContacts] = useState(null);
+
+
+    api.get('/contatos').then(response =>{
+      if(response.ok){
+        setContacts(response.data)
+      }
+    })
     
     const renderItem = ({ item }) => (
-        <Item title={item.title} />
+      <TouchableOpacity style={styles.item} onPress={()=> navigation.navigate('Details', {contactId: item.id})}>
+        <Image
+          style={styles.tinyLogo}
+          source={{
+            uri: 'https://reactnative.dev/img/tiny_logo.png',
+          }}
+        />
+        <Text style={styles.title}>{item.nome}</Text>
+      </TouchableOpacity>
     );
 
     return (
         <SafeAreaView style={styles.container}>
-        <FlatList
-            data={DATA}
-            renderItem={renderItem}
-            keyExtractor={item => item.id}
-        />
+          <FlatList
+              data={contacts}
+              renderItem={renderItem}
+          />
         </SafeAreaView>
     );
 }
@@ -48,6 +44,9 @@ const styles = StyleSheet.create({
     marginTop: StatusBar.currentHeight || 0,
   },
   item: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    textAlign: 'center',
     backgroundColor: '#f9c2ff',
     padding: 20,
     marginVertical: 8,
@@ -56,6 +55,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
   },
+  tinyLogo: {
+    width: 50,
+    height: 50,
+    marginRight: 60,
+  }
 });
 
 export default HomeScreen;
