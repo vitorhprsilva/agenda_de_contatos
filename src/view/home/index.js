@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, Image, FlatList, StyleSheet, Text, StatusBar } from 'react-native';
+import { SafeAreaView, Image, FlatList, StyleSheet, Text, StatusBar, ActivityIndicator, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import api from '../../untils/api';
@@ -7,14 +7,28 @@ import api from '../../untils/api';
 
 const HomeScreen = ({navigation}) => {
 
-    const [contacts, setContacts] = useState(null);
+    const [contacts, setContacts] = useState([]);
+    const [loading, setLoadings] = useState(true);
 
 
-    api.get('/contatos').then(response =>{
-      if(response.ok){
-        setContacts(response.data)
-      }
-    })
+    
+
+    useEffect(() => {
+      api.get('/contatos').then(response =>{
+        if(response.ok){
+          setContacts(response.data);
+          setLoadings(false);
+        }
+      });
+    }, []);
+
+    if(loading){
+      return(
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <ActivityIndicator size="large" color="#00ff00" />
+        </View>
+      )
+    }
     
     const renderItem = ({ item }) => (
       <TouchableOpacity style={styles.item} onPress={()=> navigation.navigate('Details', {contactId: item.id})}>
@@ -33,6 +47,7 @@ const HomeScreen = ({navigation}) => {
           <FlatList
               data={contacts}
               renderItem={renderItem}
+              keyExtractor={(item) => item.id.toString()}
           />
         </SafeAreaView>
     );
@@ -48,6 +63,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     textAlign: 'center',
     backgroundColor: '#f9c2ff',
+    borderRadius: 20,
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
@@ -62,4 +78,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default HomeScreen;
+export default HomeScreen

@@ -1,19 +1,35 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, ActivityIndicator } from 'react-native';
 
 import api from '../../untils/api'
 
-const DetailsScreen = ({navigation, route}) => {
+const DetailsScreen = ({route}) => {
 
     const [contacts, setContacts] = useState([]);
-
+    const [loading, setLoadings] = useState(true);
     const { contactId } = route.params;
 
-    api.get(`/contatos/${contactId}`).then(response=>{
-        if(response.ok){
-            setContacts(response.data)
-        }
-    })
+    
+
+    useEffect(() => {
+
+        api.get(`/contatos/${contactId}`).then(response=>{
+            if(response.ok){
+                setContacts(response.data)
+                setLoadings(false); 
+            }
+        })
+         
+    }, []);
+
+    if(loading){
+      return(
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <ActivityIndicator size="large" color="#00ff00" />
+        </View>
+      )
+    }
+    
 
     return (
         <View style={{ flex: 1, alignItems: 'center'}}>
@@ -28,6 +44,7 @@ const DetailsScreen = ({navigation, route}) => {
             <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
                 <Text style={styles.nome}> {contacts.nome} </Text>
                 <Text style={styles.email}> {contacts.email} </Text>
+                <Text> {} </Text>
             </View>
         </View>
     );
