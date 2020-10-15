@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, ActivityIndicator } from 'react-native';
+import { View, Text, Image, ActivityIndicator } from 'react-native';
 
 import api from '../../untils/api'
+import styles from './styles'
 
 const DetailsScreen = ({route}) => {
 
@@ -24,7 +25,7 @@ const DetailsScreen = ({route}) => {
 
     if(loading){
       return(
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+        <View style={styles.container}>
           <ActivityIndicator size="large" color="#00ff00" />
         </View>
       )
@@ -32,8 +33,8 @@ const DetailsScreen = ({route}) => {
     
 
     return (
-        <View style={{ flex: 1, alignItems: 'center'}}>
-            <View style={{flex: 1, alignItems: 'center'}}>
+        <View style={styles.content}>
+            <View style={styles.content}>
                 <Image
                     style={styles.tinyLogo}
                     source={{
@@ -41,7 +42,7 @@ const DetailsScreen = ({route}) => {
                     }}
                 />
             </View>
-            <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+            <View style={styles.container}>
                 <Text style={styles.nome}> {contacts.nome} </Text>
                 <Text style={styles.email}> {contacts.email} </Text>
                 <Text> {} </Text>
@@ -50,19 +51,5 @@ const DetailsScreen = ({route}) => {
     );
 }
 
-const styles = StyleSheet.create({
-    tinyLogo: {
-      width: 100,
-      height: 100,
-      margin: 50,
-    },
-    nome: {
-        fontSize: 50,
-        fontWeight: "bold",
-    },
-    email:{
-        fontSize: 30,
-    }
-  });
 
 export default DetailsScreen;

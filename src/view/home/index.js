@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, Image, FlatList, StyleSheet, Text, StatusBar, ActivityIndicator, View } from 'react-native';
+import { SafeAreaView, Image, FlatList, Text, ActivityIndicator, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import api from '../../untils/api';
+import styles from './styles'
 
 
 const HomeScreen = ({navigation}) => {
@@ -24,7 +25,7 @@ const HomeScreen = ({navigation}) => {
 
     if(loading){
       return(
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+        <View style={styles.viewActiviti}>
           <ActivityIndicator size="large" color="#00ff00" />
         </View>
       )
@@ -49,33 +50,11 @@ const HomeScreen = ({navigation}) => {
               renderItem={renderItem}
               keyExtractor={(item) => item.id.toString()}
           />
+          <TouchableOpacity style={styles.item} onPress={()=> navigation.navigate('Create')}>
+            <Text>Cadastrar</Text>
+          </TouchableOpacity>
         </SafeAreaView>
     );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginTop: StatusBar.currentHeight || 0,
-  },
-  item: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    textAlign: 'center',
-    backgroundColor: '#f9c2ff',
-    borderRadius: 20,
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
-  },
-  title: {
-    fontSize: 32,
-  },
-  tinyLogo: {
-    width: 50,
-    height: 50,
-    marginRight: 60,
-  }
-});
 
 export default HomeScreen
