@@ -22,7 +22,10 @@ const styles = StyleSheet.create({
     },
     email:{
         fontSize: 30,
-    }
+    },
+    buttonSend: {
+      alignSelf: "flex-end",
+    },
   });
 
   export default styles;
